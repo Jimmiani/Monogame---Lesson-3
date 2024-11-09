@@ -34,16 +34,16 @@ namespace Monogame___Lesson_3
             _graphics.ApplyChanges();
             this.Window.Title = "Tribbles all over the place!";
             // Brown tribble
-            brownTribbleSpeed = new Vector2(3, 2); // gets stuck
-            brownTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+            brownTribbleSpeed = new Vector2(5, 5); // gets stuck
+            brownTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
 
             // Cream tribble
             creamTribbleSpeed = new Vector2(6, 2);
-            creamTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+            creamTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
 
             // Orange tribble
             orangeTribbleSpeed = new Vector2(4, 2);
-            orangeTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+            orangeTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
 
             // Grey tribble
             for (int i = 0; i < 20; i++)
@@ -51,7 +51,7 @@ namespace Monogame___Lesson_3
                 speeds.Add(i);
             }
             greyTribbleSpeed = new Vector2(2, 2);
-            greyTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+            greyTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
 
 
             base.Initialize();
@@ -79,10 +79,14 @@ namespace Monogame___Lesson_3
             if (brownTribbleRect.Left < 0 || brownTribbleRect.Right > _graphics.PreferredBackBufferWidth)
             {
                 brownTribbleSpeed.X *= -1;
+                brownTribbleRect.Width = 150;
+                brownTribbleRect.Height = 150;
             }
             if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > _graphics.PreferredBackBufferHeight)
             {
                 brownTribbleSpeed.Y *= -1;
+                brownTribbleRect.Width = 100;
+                brownTribbleRect.Height = 100;
             }
 
             // Cream tribble
@@ -90,12 +94,12 @@ namespace Monogame___Lesson_3
             creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
             if (creamTribbleRect.Left < 0 || creamTribbleRect.Right > _graphics.PreferredBackBufferWidth)
             {
-                creamTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+                creamTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
                 creamTribbleSpeed.X *= -1;
             }
             if (creamTribbleRect.Top < 0 || creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight)
             {
-                creamTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
+                creamTribbleRect = new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth), generator.Next(_graphics.PreferredBackBufferHeight), tribSize, tribSize);
                 creamTribbleSpeed.Y *= -1;
             }
 
