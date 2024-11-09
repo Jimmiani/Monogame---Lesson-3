@@ -34,7 +34,7 @@ namespace Monogame___Lesson_3
             _graphics.ApplyChanges();
             this.Window.Title = "Tribbles all over the place!";
             // Brown tribble
-            brownTribbleSpeed = new Vector2(3, 2);
+            brownTribbleSpeed = new Vector2(3, 2); // gets stuck
             brownTribbleRect = new Rectangle(generator.Next(800), generator.Next(600), tribSize, tribSize);
 
             // Cream tribble
