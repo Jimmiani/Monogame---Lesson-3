@@ -36,7 +36,7 @@ namespace Monogame___Lesson_3
             _graphics.ApplyChanges();
             this.Window.Title = "Tribbles all over the place!";
             // Brown tribble
-            brownTribbleSpeed = new Vector2(4, 4);
+            brownTribbleSpeed = new Vector2(7, 6);
             brownTribbleRect = new Rectangle(generator.Next(window.Width - tribSize), generator.Next(window.Height - tribSize), tribSize, tribSize);
 
             // Cream tribble
@@ -80,12 +80,18 @@ namespace Monogame___Lesson_3
             brownTribbleRect.X += (int)brownTribbleSpeed.X;
             brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
             
-            if (brownTribbleRect.Left < 0 || brownTribbleRect.Right > window.Width)
+            if (brownTribbleRect.Right > window.Width)
             {
                 brownTribbleSpeed.X *= -1;
                 brownTribbleRect.Width = 150;
                 brownTribbleRect.Height = 150;
                 brownTribbleRect.X = window.Width - brownTribbleRect.Width;
+            }
+            if (brownTribbleRect.Left < 0)
+            {
+                brownTribbleSpeed.X *= -1;
+                brownTribbleRect.Width = 150;
+                brownTribbleRect.Height = 150;
             }
             if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > window.Height)
             {
@@ -108,7 +114,7 @@ namespace Monogame___Lesson_3
                 creamTribbleSpeed.Y *= -1;
             }
 
-            // Orange tribble - working on
+            // Orange tribble
             orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
             orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
             if (orangeTribbleRect.Right < 0)
@@ -121,7 +127,7 @@ namespace Monogame___Lesson_3
             }
             if (orangeTribbleRect.Bottom < 0)
             {
-                orangeTribbleRect = new Rectangle(orangeTribbleRect.X, -tribSize, tribSize, tribSize);
+                orangeTribbleRect = new Rectangle(orangeTribbleRect.X, window.Height - tribSize, tribSize, tribSize);
             }
             if (orangeTribbleRect.Top > window.Height)
             {
