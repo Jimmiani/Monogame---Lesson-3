@@ -44,8 +44,8 @@ namespace Monogame___Lesson_3
             creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
 
             // Orange tribble
-            orangeTribbleSpeed = new Vector2(4, 2);
-            orangeTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+            orangeTribbleSpeed = new Vector2(4, 0);
+            orangeTribbleRect = new Rectangle(window.Width / 2, (window.Height / 2) - tribSize / 2, tribSize, tribSize);
 
             // Grey tribble
             for (int i = 0; i < 20; i++)
@@ -166,6 +166,11 @@ namespace Monogame___Lesson_3
             _spriteBatch.Draw(enterpriseTexture, new Vector2(0, 0), Color.White);
             _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
             _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
+
+            if (orangeTribbleRect.Right > window.Width)
+            {
+                _spriteBatch.Draw(orangeTribbleTexture, new Rectangle(0, orangeTribbleRect.Y, tribSize, tribSize), Color.White);
+            }
             _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
             _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
 
