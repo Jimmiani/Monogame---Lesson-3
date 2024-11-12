@@ -17,7 +17,7 @@ namespace Monogame___Lesson_3
         List<int> speeds = new List<int>();
 
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture;
-        Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed;
+        Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2;
         int tribSize = 100;
         public Game1()
@@ -45,8 +45,8 @@ namespace Monogame___Lesson_3
             // Orange tribble
             orangeTribbleSpeed = new Vector2(4, 0);
             orangeTribbleRect = new Rectangle(window.Width / 2, (window.Height / 2) - tribSize / 2, tribSize, tribSize);
-
-            orangeTribbleRect2 = new Rectangle(-tribSize * (int)orangeTribbleSpeed.X, orangeTribbleRect.Y, tribSize, tribSize);
+            orangeTribbleSpeed2 = new Vector2(4, 0);
+            orangeTribbleRect2 = new Rectangle(-orangeTribbleRect.Width, orangeTribbleRect.Y, tribSize, tribSize);
 
             // Grey tribble
             for (int i = 0; i < 20; i++)
@@ -84,21 +84,21 @@ namespace Monogame___Lesson_3
             if (brownTribbleRect.Right > window.Width)
             {
                 brownTribbleSpeed.X *= -1;
-                brownTribbleRect.Width = 150;
-                brownTribbleRect.Height = 150;
+                brownTribbleRect.Width *= 2;
+                brownTribbleRect.Height *= 2;
                 brownTribbleRect.X = window.Width - brownTribbleRect.Width;
             }
             if (brownTribbleRect.Left < 0)
             {
                 brownTribbleSpeed.X *= -1;
-                brownTribbleRect.Width = 150;
-                brownTribbleRect.Height = 150;
+                brownTribbleRect.Width *= 2;
+                brownTribbleRect.Height *= 2;
             }
             if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > window.Height)
             {
                 brownTribbleSpeed.Y *= -1;
-                brownTribbleRect.Width = 100;
-                brownTribbleRect.Height = 100;
+                brownTribbleRect.Width = tribSize;
+                brownTribbleRect.Height = tribSize;
             }
 
             // Cream tribble
@@ -118,16 +118,19 @@ namespace Monogame___Lesson_3
             // Orange tribble
             orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
             orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
-            orangeTribbleRect2.X += (int)orangeTribbleSpeed.X;
-            orangeTribbleRect2.Y += (int)orangeTribbleSpeed.Y;
-            
+            orangeTribbleRect2.X += (int)orangeTribbleSpeed2.X;
+            orangeTribbleRect2.Y += (int)orangeTribbleSpeed2.Y;
+            if(orangeTribbleRect.Right > window.Width)
+                orangeTribbleSpeed2.X = orangeTribbleSpeed.X;
+
             if (orangeTribbleRect.Left > window.Width)
             {
                 orangeTribbleRect = orangeTribbleRect2;
             }
             if (orangeTribbleRect2.Left > 0)
             {
-                orangeTribbleRect2 = new Rectangle(-tribSize * (int)orangeTribbleSpeed.X, orangeTribbleRect.Y, tribSize, tribSize);
+                orangeTribbleSpeed2.X = 0;
+                orangeTribbleRect2.X = -orangeTribbleRect2.Width;
             }
 
             // Grey tribble
