@@ -19,8 +19,7 @@ namespace Monogame___Lesson_3
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect;
-        int tribSize = 100;
-
+        int tribSize = 100, xValue = -388;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -117,21 +116,9 @@ namespace Monogame___Lesson_3
             // Orange tribble
             orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
             orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
-            if (orangeTribbleRect.Right < 0)
-            {
-                orangeTribbleRect = new Rectangle(window.Width - tribSize, orangeTribbleRect.Y, tribSize, tribSize);
-            }
             if (orangeTribbleRect.Left > window.Width)
             {
-                orangeTribbleRect = new Rectangle(-tribSize, orangeTribbleRect.Y, tribSize, tribSize);
-            }
-            if (orangeTribbleRect.Bottom < 0)
-            {
-                orangeTribbleRect = new Rectangle(orangeTribbleRect.X, window.Height - tribSize, tribSize, tribSize);
-            }
-            if (orangeTribbleRect.Top > window.Height)
-            {
-                orangeTribbleRect = new Rectangle(orangeTribbleRect.X, -tribSize, tribSize, tribSize);
+                orangeTribbleRect = new Rectangle(0, orangeTribbleRect.Y, tribSize, tribSize);
             }
 
             // Grey tribble
@@ -161,6 +148,7 @@ namespace Monogame___Lesson_3
         {
             GraphicsDevice.Clear(Color.BurlyWood);
 
+            
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(enterpriseTexture, new Vector2(0, 0), Color.White);
@@ -169,13 +157,19 @@ namespace Monogame___Lesson_3
 
             if (orangeTribbleRect.Right > window.Width)
             {
-                _spriteBatch.Draw(orangeTribbleTexture, new Rectangle(0, orangeTribbleRect.Y, tribSize, tribSize), Color.White);
+                _spriteBatch.Draw(orangeTribbleTexture, new Rectangle(xValue, orangeTribbleRect.Y, tribSize, tribSize), Color.White);
             }
+
             _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
             _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
 
             _spriteBatch.End();
 
+            xValue+=4;
+            if (xValue > 0)
+            {
+                xValue = -388;
+            }
             base.Draw(gameTime);
         }
     }
