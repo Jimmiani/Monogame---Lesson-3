@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 
 namespace Monogame___Lesson_3
@@ -12,14 +13,22 @@ namespace Monogame___Lesson_3
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        MouseState mouseState, prevMouseState;
         Rectangle window;
         Random generator = new Random();
         List<int> speeds = new List<int>();
 
-        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture;
+        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2;
         int tribSize = 100;
+        enum Screen
+        {
+            Intro,
+            TribbleYard
+        }
+        Screen screen;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -29,6 +38,7 @@ namespace Monogame___Lesson_3
 
         protected override void Initialize()
         {
+            screen = Screen.Intro;
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
@@ -70,6 +80,7 @@ namespace Monogame___Lesson_3
             orangeTribbleTexture = Content.Load<Texture2D>("tribbleOrange");
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
+            introScreenTexture = Content.Load<Texture2D>("tribble_intro");
         }
 
         protected override void Update(GameTime gameTime)
@@ -77,79 +88,93 @@ namespace Monogame___Lesson_3
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // Brown tribble
-            brownTribbleRect.X += (int)brownTribbleSpeed.X;
-            brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
+            prevMouseState = mouseState;
+            mouseState = Mouse.GetState();
+
+            if (screen == Screen.Intro)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                {
+                    screen = Screen.TribbleYard;
+                }
+            }
+
+            else if (screen == Screen.TribbleYard)
+            {
+                // Brown tribble
+                brownTribbleRect.X += (int)brownTribbleSpeed.X;
+                brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
             
-            if (brownTribbleRect.Right > window.Width)
-            {
-                brownTribbleSpeed.X *= -1;
-                brownTribbleRect.Width *= 2;
-                brownTribbleRect.Height *= 2;
-                brownTribbleRect.X = window.Width - brownTribbleRect.Width;
-            }
-            if (brownTribbleRect.Left < 0)
-            {
-                brownTribbleSpeed.X *= -1;
-                brownTribbleRect.Width *= 2;
-                brownTribbleRect.Height *= 2;
-            }
-            if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > window.Height)
-            {
-                brownTribbleSpeed.Y *= -1;
-                brownTribbleRect.Width = tribSize;
-                brownTribbleRect.Height = tribSize;
-            }
+                if (brownTribbleRect.Right > window.Width)
+                {
+                    brownTribbleSpeed.X *= -1;
+                    brownTribbleRect.Width *= 2;
+                    brownTribbleRect.Height *= 2;
+                    brownTribbleRect.X = window.Width - brownTribbleRect.Width;
+                }
+                if (brownTribbleRect.Left < 0)
+                {
+                    brownTribbleSpeed.X *= -1;
+                    brownTribbleRect.Width *= 2;
+                    brownTribbleRect.Height *= 2;
+                }
+                if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > window.Height)
+                {
+                    brownTribbleSpeed.Y *= -1;
+                    brownTribbleRect.Width = tribSize;
+                    brownTribbleRect.Height = tribSize;
+                }
 
-            // Cream tribble
-            creamTribbleRect.X += (int)creamTribbleSpeed.X;
-            creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
-            if (creamTribbleRect.Left < 0 || creamTribbleRect.Right > window.Width)
-            {
-                creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
-                creamTribbleSpeed.X *= -1;
-            }
-            if (creamTribbleRect.Top < 0 || creamTribbleRect.Bottom > window.Height)
-            {
-                creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
-                creamTribbleSpeed.Y *= -1;
-            }
+                // Cream tribble
+                creamTribbleRect.X += (int)creamTribbleSpeed.X;
+                creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
+                if (creamTribbleRect.Left < 0 || creamTribbleRect.Right > window.Width)
+                {
+                    creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+                    creamTribbleSpeed.X *= -1;
+                }
+                if (creamTribbleRect.Top < 0 || creamTribbleRect.Bottom > window.Height)
+                {
+                    creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+                    creamTribbleSpeed.Y *= -1;
+                }
 
-            // Orange tribble
-            orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
-            orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
-            orangeTribbleRect2.X += (int)orangeTribbleSpeed2.X;
-            orangeTribbleRect2.Y += (int)orangeTribbleSpeed2.Y;
-            if(orangeTribbleRect.Right > window.Width)
-                orangeTribbleSpeed2.X = orangeTribbleSpeed.X;
+                // Orange tribble
+                orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
+                orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
+                orangeTribbleRect2.X += (int)orangeTribbleSpeed2.X;
+                orangeTribbleRect2.Y += (int)orangeTribbleSpeed2.Y;
+                if(orangeTribbleRect.Right > window.Width)
+                    orangeTribbleSpeed2.X = orangeTribbleSpeed.X;
 
-            if (orangeTribbleRect.Left > window.Width)
-            {
-                orangeTribbleRect = orangeTribbleRect2;
-            }
-            if (orangeTribbleRect2.Left > 0)
-            {
-                orangeTribbleSpeed2.X = 0;
-                orangeTribbleRect2.X = -orangeTribbleRect2.Width;
-            }
+                if (orangeTribbleRect.Left > window.Width)
+                {
+                    orangeTribbleRect = orangeTribbleRect2;
+                }
+                if (orangeTribbleRect2.Left > 0)
+                {
+                    orangeTribbleSpeed2.X = 0;
+                    orangeTribbleRect2.X = -orangeTribbleRect2.Width;
+                }
 
-            // Grey tribble
-            greyTribbleRect.X += (int)greyTribbleSpeed.X;
-            greyTribbleRect.Y += (int)greyTribbleSpeed.Y;
-            if (greyTribbleRect.Left < 0 || greyTribbleRect.Right > window.Width)
-            {
-                if (greyTribbleRect.X < 0)
-                    greyTribbleSpeed.X = speeds[generator.Next(speeds.Count)];
-                else
-                    greyTribbleSpeed.X = -1 * speeds[generator.Next(speeds.Count)];
-            }
+                // Grey tribble
+                greyTribbleRect.X += (int)greyTribbleSpeed.X;
+                greyTribbleRect.Y += (int)greyTribbleSpeed.Y;
+                if (greyTribbleRect.Left < 0 || greyTribbleRect.Right > window.Width)
+                {
+                    if (greyTribbleRect.X < 0)
+                        greyTribbleSpeed.X = speeds[generator.Next(speeds.Count)];
+                    else
+                        greyTribbleSpeed.X = -1 * speeds[generator.Next(speeds.Count)];
+                }
                 
-            if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
-            {
-                if (greyTribbleRect.Y < 0)
-                    greyTribbleSpeed.Y = speeds[generator.Next(speeds.Count)];
-                else
-                    greyTribbleSpeed.Y = -1 * speeds[generator.Next(speeds.Count)];
+                if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
+                {
+                    if (greyTribbleRect.Y < 0)
+                        greyTribbleSpeed.Y = speeds[generator.Next(speeds.Count)];
+                    else
+                        greyTribbleSpeed.Y = -1 * speeds[generator.Next(speeds.Count)];
+                }
             }
                 
 
@@ -162,18 +187,24 @@ namespace Monogame___Lesson_3
 
             
             _spriteBatch.Begin();
-
-            _spriteBatch.Draw(enterpriseTexture, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
-            _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
-
-            if (orangeTribbleRect.Right > window.Width)
+            if (screen == Screen.Intro)
             {
-                _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect2, Color.White);
+                _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 600), Color.White);
             }
+            else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(enterpriseTexture, new Vector2(0, 0), Color.White);
+                _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
+                _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
 
-            _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
-            _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
+                if (orangeTribbleRect.Right > window.Width)
+                {
+                    _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect2, Color.White);
+                }
+
+                _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
+                    _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
+            }
 
             _spriteBatch.End();
 
