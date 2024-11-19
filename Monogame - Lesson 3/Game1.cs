@@ -18,14 +18,16 @@ namespace Monogame___Lesson_3
         Random generator = new Random();
         List<int> speeds = new List<int>();
 
-        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, startBtnTexture;
+        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, startBtnTexture, continueBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
-        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, startBtnRect;
+        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, startBtnRect, continueBtnRect;
         int tribSize = 100;
         enum Screen
         {
             Intro,
-            TribbleYard
+            TribbleYard,
+            End
+                
         }
         Screen screen;
 
@@ -46,6 +48,9 @@ namespace Monogame___Lesson_3
             this.Window.Title = "Tribbles all over the place!";
             // Start Button
             startBtnRect = new Rectangle((window.Width - 250) / 2,(window.Height - 107) / 2, 250, 107);
+
+            // Continue Button
+            continueBtnRect = new Rectangle(625, 450, 150, 43);
 
             // Brown tribble
             brownTribbleSpeed = new Vector2(7, 6);
@@ -84,7 +89,8 @@ namespace Monogame___Lesson_3
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             introScreenTexture = Content.Load<Texture2D>("tribble_intro");
-            startBtnTexture = Content.Load<Texture2D>("btnStart");
+            startBtnTexture = Content.Load<Texture2D>("startBtn");
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -183,7 +189,10 @@ namespace Monogame___Lesson_3
                         greyTribbleSpeed.Y = -1 * speeds[generator.Next(speeds.Count)];
                 }
             }
-                
+            else if (screen == Screen.End)
+            {
+
+            }   
 
             base.Update(gameTime);
         }
