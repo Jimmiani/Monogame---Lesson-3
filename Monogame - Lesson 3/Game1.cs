@@ -18,9 +18,9 @@ namespace Monogame___Lesson_3
         Random generator = new Random();
         List<int> speeds = new List<int>();
 
-        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture;
+        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, startBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
-        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2;
+        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, startBtnRect;
         int tribSize = 100;
         enum Screen
         {
@@ -39,11 +39,14 @@ namespace Monogame___Lesson_3
         protected override void Initialize()
         {
             screen = Screen.Intro;
-            window = new Rectangle(0, 0, 800, 600);
+            window = new Rectangle(0, 0, 800, 500);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
             this.Window.Title = "Tribbles all over the place!";
+            // Start Button
+            startBtnRect = new Rectangle((window.Width - 250) / 2,(window.Height - 107) / 2, 250, 107);
+
             // Brown tribble
             brownTribbleSpeed = new Vector2(7, 6);
             brownTribbleRect = new Rectangle(generator.Next(window.Width - tribSize), generator.Next(window.Height - tribSize), tribSize, tribSize);
@@ -81,6 +84,7 @@ namespace Monogame___Lesson_3
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             introScreenTexture = Content.Load<Texture2D>("tribble_intro");
+            startBtnTexture = Content.Load<Texture2D>("btnStart");
         }
 
         protected override void Update(GameTime gameTime)
@@ -95,7 +99,10 @@ namespace Monogame___Lesson_3
             {
                 if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
                 {
-                    screen = Screen.TribbleYard;
+                    if (startBtnRect.Contains(mouseState.Position))
+                    {
+                        screen = Screen.TribbleYard;
+                    }
                 }
             }
 
@@ -189,11 +196,12 @@ namespace Monogame___Lesson_3
             _spriteBatch.Begin();
             if (screen == Screen.Intro)
             {
-                _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 600), Color.White);
+                _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 500), Color.White);
+                _spriteBatch.Draw(startBtnTexture, startBtnRect, Color.White);
             }
             else if (screen == Screen.TribbleYard)
             {
-                _spriteBatch.Draw(enterpriseTexture, new Vector2(0, 0), Color.White);
+                _spriteBatch.Draw(enterpriseTexture, new Vector2(0, -50), Color.White);
                 _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
                 _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
 
@@ -203,7 +211,7 @@ namespace Monogame___Lesson_3
                 }
 
                 _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
-                    _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
+                _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
             }
 
             _spriteBatch.End();
