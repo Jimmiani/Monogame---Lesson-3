@@ -107,6 +107,12 @@
 #begin trekFont.ttf
 /copy:trekFont.ttf
 
+#begin trekSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:trekSong.mp3
+
 #begin tribble_intro.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
