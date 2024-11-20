@@ -25,6 +25,30 @@
 /processorParam:TextureFormat=Color
 /build:continueBtn.png
 
+#begin endScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:endScreen.png
+
+#begin endText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:endText.png
+
 #begin enterprise.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -37,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:enterprise.png
 
-#begin startBtn.png
+#begin playBtn.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,7 +71,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:startBtn.png
+/build:playBtn.png
+
+#begin textFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:textFont.spritefont
+
+#begin trekFont.ttf
+/copy:trekFont.ttf
 
 #begin tribble_intro.jpg
 /importer:TextureImporter

@@ -18,10 +18,12 @@ namespace Monogame___Lesson_3
         Random generator = new Random();
         List<int> speeds = new List<int>();
 
-        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, startBtnTexture, continueBtnTexture;
+        SpriteFont textFont;
+        Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
+        Texture2D endScreenTexture, endTextTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
-        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, startBtnRect, continueBtnRect;
-        int tribSize = 100;
+        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect;
+        int tribSize, collisions;
         enum Screen
         {
             Intro,
@@ -45,12 +47,13 @@ namespace Monogame___Lesson_3
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
+            tribSize = 100;
             this.Window.Title = "Tribbles all over the place!";
             // Start Button
-            startBtnRect = new Rectangle((window.Width - 250) / 2,(window.Height - 107) / 2, 250, 107);
+            playBtnRect = new Rectangle((window.Width - 250) / 2, (window.Height - 114) / 2, 250, 107);
 
             // Continue Button
-            continueBtnRect = new Rectangle(625, 450, 150, 43);
+            continueBtnRect = new Rectangle(640, 450, 150, 43);
 
             // Brown tribble
             brownTribbleSpeed = new Vector2(7, 6);
@@ -84,13 +87,16 @@ namespace Monogame___Lesson_3
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             enterpriseTexture = Content.Load<Texture2D>("enterprise");
+            endScreenTexture = Content.Load<Texture2D>("endScreen");
             greyTribbleTexture = Content.Load<Texture2D>("tribbleGrey");
             orangeTribbleTexture = Content.Load<Texture2D>("tribbleOrange");
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             introScreenTexture = Content.Load<Texture2D>("tribble_intro");
-            startBtnTexture = Content.Load<Texture2D>("startBtn");
-
+            playBtnTexture = Content.Load<Texture2D>("startBtn");
+            continueBtnTexture = Content.Load<Texture2D>("continueBtn");
+            textFont = Content.Load<SpriteFont>("textFont");
+            endTextTexture = Content.Load<Texture2D>("endText");
         }
 
         protected override void Update(GameTime gameTime)
@@ -103,9 +109,10 @@ namespace Monogame___Lesson_3
 
             if (screen == Screen.Intro)
             {
+                // Start Button
                 if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
                 {
-                    if (startBtnRect.Contains(mouseState.Position))
+                    if (playBtnRect.Contains(mouseState.Position))
                     {
                         screen = Screen.TribbleYard;
                     }
@@ -114,6 +121,15 @@ namespace Monogame___Lesson_3
 
             else if (screen == Screen.TribbleYard)
             {
+                // Continue button
+                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                {
+                    if (continueBtnRect.Contains(mouseState.Position))
+                    {
+                        screen = Screen.End;
+                    }
+                }
+
                 // Brown tribble
                 brownTribbleRect.X += (int)brownTribbleSpeed.X;
                 brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
@@ -124,18 +140,21 @@ namespace Monogame___Lesson_3
                     brownTribbleRect.Width *= 2;
                     brownTribbleRect.Height *= 2;
                     brownTribbleRect.X = window.Width - brownTribbleRect.Width;
+                    collisions++;
                 }
                 if (brownTribbleRect.Left < 0)
                 {
                     brownTribbleSpeed.X *= -1;
                     brownTribbleRect.Width *= 2;
                     brownTribbleRect.Height *= 2;
+                    collisions++;
                 }
                 if (brownTribbleRect.Top < 0 || brownTribbleRect.Bottom > window.Height)
                 {
                     brownTribbleSpeed.Y *= -1;
                     brownTribbleRect.Width = tribSize;
                     brownTribbleRect.Height = tribSize;
+                    collisions++;
                 }
 
                 // Cream tribble
@@ -145,11 +164,13 @@ namespace Monogame___Lesson_3
                 {
                     creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
                     creamTribbleSpeed.X *= -1;
+                    collisions++;
                 }
                 if (creamTribbleRect.Top < 0 || creamTribbleRect.Bottom > window.Height)
                 {
                     creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
                     creamTribbleSpeed.Y *= -1;
+                    collisions++;
                 }
 
                 // Orange tribble
@@ -157,8 +178,11 @@ namespace Monogame___Lesson_3
                 orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
                 orangeTribbleRect2.X += (int)orangeTribbleSpeed2.X;
                 orangeTribbleRect2.Y += (int)orangeTribbleSpeed2.Y;
-                if(orangeTribbleRect.Right > window.Width)
+                if (orangeTribbleRect.Right > window.Width)
+                { 
                     orangeTribbleSpeed2.X = orangeTribbleSpeed.X;
+                    collisions++;
+                }
 
                 if (orangeTribbleRect.Left > window.Width)
                 {
@@ -179,6 +203,7 @@ namespace Monogame___Lesson_3
                         greyTribbleSpeed.X = speeds[generator.Next(speeds.Count)];
                     else
                         greyTribbleSpeed.X = -1 * speeds[generator.Next(speeds.Count)];
+                    collisions++;
                 }
                 
                 if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
@@ -187,6 +212,7 @@ namespace Monogame___Lesson_3
                         greyTribbleSpeed.Y = speeds[generator.Next(speeds.Count)];
                     else
                         greyTribbleSpeed.Y = -1 * speeds[generator.Next(speeds.Count)];
+                    collisions++;
                 }
             }
             else if (screen == Screen.End)
@@ -206,7 +232,7 @@ namespace Monogame___Lesson_3
             if (screen == Screen.Intro)
             {
                 _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 500), Color.White);
-                _spriteBatch.Draw(startBtnTexture, startBtnRect, Color.White);
+                _spriteBatch.Draw(playBtnTexture, playBtnRect, Color.White);
             }
             else if (screen == Screen.TribbleYard)
             {
@@ -221,6 +247,13 @@ namespace Monogame___Lesson_3
 
                 _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
                 _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
+                _spriteBatch.Draw(continueBtnTexture, continueBtnRect, Color.White);
+            }
+            else if (screen == Screen.End)
+            {
+                _spriteBatch.Draw(endScreenTexture, new Vector2(0, 0), Color.White);
+                _spriteBatch.Draw(endTextTexture, new Rectangle(105, 180, 590, 60), Color.White);
+                _spriteBatch.DrawString(textFont, "Congratulations! You got rid of " + collisions + " tribbles!", new Vector2(130, 190), Color.Black);
             }
 
             _spriteBatch.End();
