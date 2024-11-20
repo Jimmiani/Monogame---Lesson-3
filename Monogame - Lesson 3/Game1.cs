@@ -20,13 +20,15 @@ namespace Monogame___Lesson_3
 
         SpriteFont textFont;
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
-        Texture2D endScreenTexture, endTextTexture;
+        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
-        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect;
+        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect;
         int tribSize, collisions;
         enum Screen
         {
             Intro,
+            Options,
+            Rules,
             TribbleYard,
             End
                 
@@ -54,6 +56,9 @@ namespace Monogame___Lesson_3
 
             // Continue Button
             continueBtnRect = new Rectangle(640, 450, 150, 43);
+
+            // Menu Button
+            menuRect = new Rectangle((window.Width - 700) / 2, (window.Height - 288) / 2, 700, 288);
 
             // Brown tribble
             brownTribbleSpeed = new Vector2(7, 6);
@@ -97,6 +102,7 @@ namespace Monogame___Lesson_3
             continueBtnTexture = Content.Load<Texture2D>("continueBtn");
             textFont = Content.Load<SpriteFont>("textFont");
             endTextTexture = Content.Load<Texture2D>("endText");
+            menuTexture = Content.Load<Texture2D>("menuBtn");
         }
 
         protected override void Update(GameTime gameTime)
@@ -119,6 +125,16 @@ namespace Monogame___Lesson_3
                 }
             }
 
+            else if (screen == Screen.Options)
+            {
+
+            }
+
+            else if (screen == Screen.Rules)
+            {
+
+            }
+
             else if (screen == Screen.TribbleYard)
             {
                 // Continue button
@@ -133,7 +149,7 @@ namespace Monogame___Lesson_3
                 // Brown tribble
                 brownTribbleRect.X += (int)brownTribbleSpeed.X;
                 brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
-            
+
                 if (brownTribbleRect.Right > window.Width)
                 {
                     brownTribbleSpeed.X *= -1;
@@ -179,7 +195,7 @@ namespace Monogame___Lesson_3
                 orangeTribbleRect2.X += (int)orangeTribbleSpeed2.X;
                 orangeTribbleRect2.Y += (int)orangeTribbleSpeed2.Y;
                 if (orangeTribbleRect.Right > window.Width)
-                { 
+                {
                     orangeTribbleSpeed2.X = orangeTribbleSpeed.X;
                     collisions++;
                 }
@@ -205,7 +221,7 @@ namespace Monogame___Lesson_3
                         greyTribbleSpeed.X = -1 * speeds[generator.Next(speeds.Count)];
                     collisions++;
                 }
-                
+
                 if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
                 {
                     if (greyTribbleRect.Y < 0)
@@ -233,6 +249,10 @@ namespace Monogame___Lesson_3
             {
                 _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 500), Color.White);
                 _spriteBatch.Draw(playBtnTexture, playBtnRect, Color.White);
+            }
+            else if (screen == Screen.Options)
+            {
+                _spriteBatch.Draw(menuTexture, menuRect, Color.White);
             }
             else if (screen == Screen.TribbleYard)
             {
