@@ -93,7 +93,7 @@ namespace Monogame___Lesson_3
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             introScreenTexture = Content.Load<Texture2D>("tribble_intro");
-            playBtnTexture = Content.Load<Texture2D>("startBtn");
+            playBtnTexture = Content.Load<Texture2D>("playBtn");
             continueBtnTexture = Content.Load<Texture2D>("continueBtn");
             textFont = Content.Load<SpriteFont>("textFont");
             endTextTexture = Content.Load<Texture2D>("endText");
