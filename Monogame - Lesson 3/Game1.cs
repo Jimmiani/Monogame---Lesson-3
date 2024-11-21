@@ -22,9 +22,9 @@ namespace Monogame___Lesson_3
         Song trekSong;
         SpriteFont textFont;
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
-        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture;
+        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
-        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect;
+        Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect, instructionsBtnRect, musicBtnRect;
         int tribSize, collisions;
         enum Screen
         {
@@ -113,7 +113,8 @@ namespace Monogame___Lesson_3
             endTextTexture = Content.Load<Texture2D>("endText");
             menuTexture = Content.Load<Texture2D>("menuBtn");
             optionsBtnTexture = Content.Load<Texture2D>("optionsBtn");
-            
+            musicBtnTexture = Content.Load<Texture2D>("musicBtn");
+            instructionsBtnTexture = Content.Load<Texture2D>("instructionsBtn");
         }
 
         protected override void Update(GameTime gameTime)
