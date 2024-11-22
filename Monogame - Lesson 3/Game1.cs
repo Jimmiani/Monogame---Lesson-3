@@ -22,16 +22,16 @@ namespace Monogame___Lesson_3
         Song trekSong;
         SpriteFont textFont;
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
-        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture, spaceBackTexture, quitBtnTexture;
+        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture, spaceBackTexture, quitBtnTexture, backBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect, instructionsBtnRect, musicBtnRect;
-        Rectangle quitBtnRect;
+        Rectangle quitBtnRect, backBtnRect;
         int tribSize, collisions;
         enum Screen
         {
             Intro,
             Options,
-            Rules,
+            Instructions,
             TribbleYard,
             End
                 
@@ -71,8 +71,14 @@ namespace Monogame___Lesson_3
             // Menu
             menuRect = new Rectangle((window.Width - 700) / 2, (window.Height - 288) / 2, 700, 288);
 
+            // Quit Button
+            quitBtnRect = new Rectangle(20, 20, 150, 48);
+
+            // Back Button
+            backBtnRect = new Rectangle(705, 20, 75, 73);
+
             // Options Button
-            optionsBtnRect = new Rectangle(20, 415, 200, 65);
+            optionsBtnRect = new Rectangle(20, 432, 150, 48);
 
             // Brown tribble
             brownTribbleSpeed = new Vector2(4, 4);
@@ -122,12 +128,22 @@ namespace Monogame___Lesson_3
             instructionsBtnTexture = Content.Load<Texture2D>("instructionsBtn");
             spaceBackTexture = Content.Load<Texture2D>("spaceBackround");
             quitBtnTexture = Content.Load<Texture2D>("quitBtn");
+            backBtnTexture = Content.Load<Texture2D>("backBtn");
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+            {
+                if (quitBtnRect.Contains(mouseState.Position))
+                {
+                    // Quit Button
+                    Exit();
+                }
+            }
 
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
@@ -158,7 +174,7 @@ namespace Monogame___Lesson_3
                     if (instructionsBtnRect.Contains(mouseState.Position))
                     {
                         // Instructions Button
-                        screen = Screen.Rules;
+                        screen = Screen.Instructions;
                     }
                     if (musicBtnRect.Contains(mouseState.Position))
                     {
@@ -168,10 +184,15 @@ namespace Monogame___Lesson_3
                         else if (MediaPlayer.State == MediaState.Paused)
                             MediaPlayer.Resume();
                     }
+                    if (backBtnRect.Contains(mouseState.Position))
+                    {
+                        // Back Button
+                        screen = Screen.Intro;
+                    }
                 }
             }
 
-            else if (screen == Screen.Rules)
+            else if (screen == Screen.Instructions)
             {
 
             }
@@ -290,6 +311,7 @@ namespace Monogame___Lesson_3
                 _spriteBatch.Draw(introScreenTexture, new Rectangle(0, 0, 800, 500), Color.White);
                 _spriteBatch.Draw(playBtnTexture, playBtnRect, Color.White);
                 _spriteBatch.Draw(optionsBtnTexture, optionsBtnRect, Color.White);
+                _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);
             }
             else if (screen == Screen.Options)
             {
@@ -297,6 +319,13 @@ namespace Monogame___Lesson_3
                 _spriteBatch.Draw(menuTexture, menuRect, Color.White);
                 _spriteBatch.Draw(instructionsBtnTexture, instructionsBtnRect, Color.White);
                 _spriteBatch.Draw(musicBtnTexture, musicBtnRect, Color.White);
+                _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);
+                _spriteBatch.Draw(backBtnTexture, backBtnRect, Color.White);
+            }
+            else if (screen == Screen.Instructions)
+            {
+                _spriteBatch.Draw(spaceBackTexture, new Vector2(0, 0), Color.White);
+                _spriteBatch.Draw(backBtnTexture, backBtnRect, Color.White);
             }
             else if (screen == Screen.TribbleYard)
             {
@@ -319,6 +348,7 @@ namespace Monogame___Lesson_3
                 _spriteBatch.Draw(endTextTexture, new Rectangle(105, 180, 590, 60), Color.White);
                 _spriteBatch.DrawString(textFont, "Congratulations! You got rid of " + collisions + " tribbles!", new Vector2(130, 190), Color.Black);
             }
+            _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);
 
             _spriteBatch.End();
 
