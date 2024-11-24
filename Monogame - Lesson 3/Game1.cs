@@ -22,10 +22,11 @@ namespace Monogame___Lesson_3
         Song trekSong;
         SpriteFont textFont;
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
-        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture, spaceBackTexture, quitBtnTexture, backBtnTexture;
+        Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture, spaceBackTexture, quitBtnTexture, backBtnTexture, musicBtnTexture2;
+        Texture2D retryBtnTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect, instructionsBtnRect, musicBtnRect;
-        Rectangle quitBtnRect, backBtnRect;
+        Rectangle quitBtnRect, backBtnRect, retryBtnRect;
         int tribSize, collisions;
         enum Screen
         {
@@ -34,7 +35,6 @@ namespace Monogame___Lesson_3
             Instructions,
             TribbleYard,
             End
-                
         }
         Screen screen;
 
@@ -80,13 +80,16 @@ namespace Monogame___Lesson_3
             // Options Button
             optionsBtnRect = new Rectangle(20, 432, 150, 48);
 
+            // Retry Button
+            retryBtnRect = new Rectangle(250, 320, 300, 71);
+
             // Brown tribble
             brownTribbleSpeed = new Vector2(4, 4);
             brownTribbleRect = new Rectangle(generator.Next(window.Width - tribSize), generator.Next(window.Height - tribSize), tribSize, tribSize);
 
             // Cream tribble
             creamTribbleSpeed = new Vector2(6, 2);
-            creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+            creamTribbleRect = new Rectangle(generator.Next(tribSize, (window.Width - tribSize)), generator.Next(tribSize, (window.Height - tribSize)), tribSize, tribSize);
 
             // Orange tribble
             orangeTribbleSpeed = new Vector2(4, 0);
@@ -100,7 +103,7 @@ namespace Monogame___Lesson_3
                 speeds.Add(i);
             }
             greyTribbleSpeed = new Vector2(2, 2);
-            greyTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+            greyTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(tribSize, (window.Height - tribSize)), tribSize, tribSize);
 
 
             base.Initialize();
@@ -125,16 +128,24 @@ namespace Monogame___Lesson_3
             menuTexture = Content.Load<Texture2D>("menuBtn");
             optionsBtnTexture = Content.Load<Texture2D>("optionsBtn");
             musicBtnTexture = Content.Load<Texture2D>("musicBtn");
+            musicBtnTexture2 = Content.Load<Texture2D>("musicBtn2");
             instructionsBtnTexture = Content.Load<Texture2D>("instructionsBtn");
             spaceBackTexture = Content.Load<Texture2D>("spaceBackround");
             quitBtnTexture = Content.Load<Texture2D>("quitBtn");
             backBtnTexture = Content.Load<Texture2D>("backBtn");
+            retryBtnTexture = Content.Load<Texture2D>("retryBtn");
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+
+            prevMouseState = mouseState;
+            mouseState = Mouse.GetState();
+            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
+
 
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
             {
@@ -144,10 +155,6 @@ namespace Monogame___Lesson_3
                     Exit();
                 }
             }
-
-            prevMouseState = mouseState;
-            mouseState = Mouse.GetState();
-            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
 
             if (screen == Screen.Intro)
             {
@@ -194,7 +201,14 @@ namespace Monogame___Lesson_3
 
             else if (screen == Screen.Instructions)
             {
-
+                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                {
+                    if (backBtnRect.Contains(mouseState.Position))
+                    {
+                        // Back Button
+                        screen = Screen.Options;
+                    }
+                }
             }
 
             else if (screen == Screen.TribbleYard)
@@ -240,13 +254,13 @@ namespace Monogame___Lesson_3
                 creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
                 if (creamTribbleRect.Left < 0 || creamTribbleRect.Right > window.Width)
                 {
-                    creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+                    creamTribbleRect = new Rectangle(generator.Next(tribSize, (window.Width - tribSize)), generator.Next(tribSize, (window.Height - tribSize)), tribSize, tribSize);
                     creamTribbleSpeed.X *= -1;
                     collisions++;
                 }
                 if (creamTribbleRect.Top < 0 || creamTribbleRect.Bottom > window.Height)
                 {
-                    creamTribbleRect = new Rectangle(generator.Next(window.Width), generator.Next(window.Height), tribSize, tribSize);
+                    creamTribbleRect = new Rectangle(generator.Next(tribSize, (window.Width - tribSize)), generator.Next(tribSize, (window.Height - tribSize)), tribSize, tribSize);
                     creamTribbleSpeed.Y *= -1;
                     collisions++;
                 }
@@ -295,7 +309,15 @@ namespace Monogame___Lesson_3
             }
             else if (screen == Screen.End)
             {
-
+                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                {
+                    if (retryBtnRect.Contains(mouseState.Position))
+                    {
+                        // Retry Button
+                        screen = Screen.Intro;
+                        collisions = 0;
+                    }
+                }
             }   
 
             base.Update(gameTime);
@@ -318,7 +340,10 @@ namespace Monogame___Lesson_3
                 _spriteBatch.Draw(spaceBackTexture, new Vector2(0, 0), Color.White);
                 _spriteBatch.Draw(menuTexture, menuRect, Color.White);
                 _spriteBatch.Draw(instructionsBtnTexture, instructionsBtnRect, Color.White);
-                _spriteBatch.Draw(musicBtnTexture, musicBtnRect, Color.White);
+                if (MediaPlayer.State == MediaState.Playing)
+                    _spriteBatch.Draw(musicBtnTexture, musicBtnRect, Color.White);
+                else if (MediaPlayer.State == MediaState.Paused)
+                    _spriteBatch.Draw(musicBtnTexture2, musicBtnRect, Color.White);
                 _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);
                 _spriteBatch.Draw(backBtnTexture, backBtnRect, Color.White);
             }
@@ -345,8 +370,9 @@ namespace Monogame___Lesson_3
             else if (screen == Screen.End)
             {
                 _spriteBatch.Draw(endScreenTexture, new Vector2(0, 0), Color.White);
-                _spriteBatch.Draw(endTextTexture, new Rectangle(105, 180, 590, 60), Color.White);
-                _spriteBatch.DrawString(textFont, "Congratulations! You got rid of " + collisions + " tribbles!", new Vector2(130, 190), Color.Black);
+                _spriteBatch.Draw(endTextTexture, new Rectangle(150, 210, 500, 80), Color.White);
+                _spriteBatch.DrawString(textFont, "          Congratulations!\n    You got rid of " + collisions + " tribbles!", new Vector2(195, 212), Color.Black);
+                _spriteBatch.Draw(retryBtnTexture, retryBtnRect, Color.White);
             }
             _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);
 
