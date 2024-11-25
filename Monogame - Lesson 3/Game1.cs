@@ -20,14 +20,15 @@ namespace Monogame___Lesson_3
         List<int> speeds = new List<int>();
 
         Song trekSong;
-        SpriteFont textFont;
+        SpriteFont endFont, instructionsFont;
         Texture2D enterpriseTexture, greyTribbleTexture, orangeTribbleTexture, creamTribbleTexture, brownTribbleTexture, introScreenTexture, playBtnTexture, continueBtnTexture;
         Texture2D endScreenTexture, endTextTexture, menuTexture, optionsBtnTexture, musicBtnTexture, instructionsBtnTexture, spaceBackTexture, quitBtnTexture, backBtnTexture, musicBtnTexture2;
-        Texture2D retryBtnTexture;
+        Texture2D retryBtnTexture, instructionsBorderTexture;
         Vector2 greyTribbleSpeed, orangeTribbleSpeed, creamTribbleSpeed, brownTribbleSpeed, orangeTribbleSpeed2;
         Rectangle greyTribbleRect, orangeTribbleRect, creamTribbleRect, brownTribbleRect, orangeTribbleRect2, playBtnRect, continueBtnRect, menuRect, optionsBtnRect, instructionsBtnRect, musicBtnRect;
-        Rectangle quitBtnRect, backBtnRect, retryBtnRect;
+        Rectangle quitBtnRect, backBtnRect, retryBtnRect, instructionsBorderRect;
         int tribSize, collisions;
+        string instructions;
         enum Screen
         {
             Intro,
@@ -67,6 +68,14 @@ namespace Monogame___Lesson_3
 
             // Instructions Button
             instructionsBtnRect = new Rectangle(242, 204, 100, 96);
+
+            // Instructions Border
+            instructionsBorderRect = new Rectangle(100, 110, 600, 319);
+            instructions = "Greetings space explorer!\n\n" +
+                           "You need to help Captain Kirk and Commander Spock clear their ship\nfrom those pesky tribbles! " +
+                           "When you press play, there will be\ntribbles bouncing around the screen, and " +
+                           "each time a tribble collides\nwith a side of the screen, you remove one tribble from The Enterprise.\n" +
+                           "Can you save the crew before the tribbles take over?\n\nGoodluck!";
 
             // Menu
             menuRect = new Rectangle((window.Width - 700) / 2, (window.Height - 288) / 2, 700, 288);
@@ -123,7 +132,7 @@ namespace Monogame___Lesson_3
             introScreenTexture = Content.Load<Texture2D>("tribble_intro");
             playBtnTexture = Content.Load<Texture2D>("playBtn");
             continueBtnTexture = Content.Load<Texture2D>("continueBtn");
-            textFont = Content.Load<SpriteFont>("textFont");
+            endFont = Content.Load<SpriteFont>("endFont");
             endTextTexture = Content.Load<Texture2D>("endText");
             menuTexture = Content.Load<Texture2D>("menuBtn");
             optionsBtnTexture = Content.Load<Texture2D>("optionsBtn");
@@ -134,6 +143,8 @@ namespace Monogame___Lesson_3
             quitBtnTexture = Content.Load<Texture2D>("quitBtn");
             backBtnTexture = Content.Load<Texture2D>("backBtn");
             retryBtnTexture = Content.Load<Texture2D>("retryBtn");
+            instructionsBorderTexture = Content.Load<Texture2D>("instructionsBorder");
+            instructionsFont = Content.Load<SpriteFont>("instructionsFont");
         }
 
         protected override void Update(GameTime gameTime)
@@ -351,6 +362,8 @@ namespace Monogame___Lesson_3
             {
                 _spriteBatch.Draw(spaceBackTexture, new Vector2(0, 0), Color.White);
                 _spriteBatch.Draw(backBtnTexture, backBtnRect, Color.White);
+                _spriteBatch.Draw(instructionsBorderTexture, instructionsBorderRect, Color.White);
+                _spriteBatch.DrawString(instructionsFont, instructions, new Vector2(130, 160), Color.White);
             }
             else if (screen == Screen.TribbleYard)
             {
@@ -371,7 +384,7 @@ namespace Monogame___Lesson_3
             {
                 _spriteBatch.Draw(endScreenTexture, new Vector2(0, 0), Color.White);
                 _spriteBatch.Draw(endTextTexture, new Rectangle(150, 210, 500, 80), Color.White);
-                _spriteBatch.DrawString(textFont, "          Congratulations!\n    You got rid of " + collisions + " tribbles!", new Vector2(195, 212), Color.Black);
+                _spriteBatch.DrawString(endFont, "          Congratulations!\n    You got rid of " + collisions + " tribbles!", new Vector2(195, 212), Color.Black);
                 _spriteBatch.Draw(retryBtnTexture, retryBtnRect, Color.White);
             }
             _spriteBatch.Draw(quitBtnTexture, quitBtnRect, Color.White);

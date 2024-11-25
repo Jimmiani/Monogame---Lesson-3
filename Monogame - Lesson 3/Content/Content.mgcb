@@ -37,6 +37,13 @@
 /processorParam:TextureFormat=Color
 /build:continueBtn.png
 
+#begin endFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:endFont.spritefont
+
 #begin endScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,6 +80,18 @@
 /processorParam:TextureFormat=Color
 /build:enterprise.png
 
+#begin instructionsBorder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:instructionsBorder.png
+
 #begin instructionsBtn.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -84,6 +103,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:instructionsBtn.png
+
+#begin instructionsFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:instructionsFont.spritefont
 
 #begin menuBtn.png
 /importer:TextureImporter
@@ -180,13 +206,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spaceBackround.png
-
-#begin textFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:textFont.spritefont
 
 #begin trekFont.ttf
 /copy:trekFont.ttf
