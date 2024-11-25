@@ -155,7 +155,6 @@ namespace Monogame___Lesson_3
 
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
-            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
 
 
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
